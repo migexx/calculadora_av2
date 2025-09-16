@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cálculo de Nota AV2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            padding: 40px;
+            text-align: center;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        input, select {
+            margin: 8px 0;
+            padding: 8px;
+            width: 140px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #2d89ef;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2162b2;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-size: 1.3em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cálculo de Nota AV2 - III Unidade</h1>
+    <form id="calcForm">
+        <label for="m1">Média I Unidade:</label>
+        <input type="number" id="m1" step="0.01" required><br>
+        <label for="m2">Média II Unidade:</label>
+        <input type="number" id="m2" step="0.01" required><br>
+        <label for="av1">Nota da AV1 III Unidade:</label>
+        <input type="number" id="av1" step="0.01" required><br>
+        <label for="ponto">Tem ponto extra?</label>
+        <select id="ponto" required>
+            <option value="não">Não</option>
+            <option value="sim">Sim</option>
+        </select><br>
+        <div id="pontoExtraDiv" style="display:none;">
+            <label for="pontoExtra">Valor do ponto extra:</label>
+            <input type="number" id="pontoExtra" step="0.01" value="0"><br>
+        </div>
+        <button type="submit">Calcular</button>
+    </form>
+    <div id="resultado"></div>
+    <script>
+    document.getElementById('ponto').addEventListener('change', function() {
+        const div = document.getElementById('pontoExtraDiv');
+        if (this.value === 'sim') {
+            div.style.display = 'block';
+        } else {
+            div.style.display = 'none';
+            document.getElementById('pontoExtra').value = 0;
+        }
+    });
+
+    document.getElementById('calcForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Obtendo os valores dos campos
+        const m1 = parseFloat(document.getElementById('m1').value);
+        const m2 = parseFloat(document.getElementById('m2').value);
+        const av1 = parseFloat(document.getElementById('av1').value);
+        const ponto = document.getElementById('ponto').value;
+        let p = 0;
+
+        if (ponto === 'sim') {
+            p = parseFloat(document.getElementById('pontoExtra').value) || 0;
+        }
+
+        // Lógica do cálculo (igual ao Python)
+        let m3 = 21 - (m1 + m2);
+        m3 = m3 - p;
+        let av2 = (m3 * 2) - av1;
+
+        // Resultado
+        const res = document.getElementById('resultado');
+        if (av2 <= 0) {
+            res.textContent = "Parabéns! Você já passou!";
+        } else {
+            res.innerHTML = `Você está quase lá!<br>Você precisa tirar: <strong>${av2.toFixed(2)}</strong> na AV2 da III Unidade.`;
+        }
+    });
+    </script>
+</body>
+</html>
